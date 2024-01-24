@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.vue.vueBoard.mapper.boardMapper">
+<select id="getboardlist" resultType="map" >
+	 SELECT * FROM vue_board
+	 LIMIT #{page}, #{pageSize}
+</select>
+<select id="getTotalCnt" resultType="int">
+ 	SELECT COUNT(*) FROM vue_board
+</select>
+<select id="getboard" resultType="map">
+	SELECT * FROM VUE_BOARD WHERE id = #{id}
+</select>  
+<insert id="insertBoard">
+	INSERT INTO VUE_BOARD
+	    	(title, content, writer, regdate, updatedate) 
+	values
+	    	(#{title}, #{content}, #{writer}, now(), now())
+</insert>
+<delete id="deleteBoard">
+	DELETE FROM VUE_BOARD WHERE id = #{id}
+</delete>
+</mapper>

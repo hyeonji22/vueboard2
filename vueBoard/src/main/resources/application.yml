@@ -1,0 +1,21 @@
+server:
+  port: 8011
+
+
+spring:
+  datasource:
+    jdbc-url: jdbc:mysql://192.168.0.13:3306/xmall4
+    username: pmguser
+    password: pmgk1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+logging:
+  level:
+    vue.server.board : debug
+
+
+# Mapper Xml Location
+mybatis:
+  mapper-locations:
+   classpath:mapper/**/*.xml
+  
