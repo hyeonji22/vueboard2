@@ -42,4 +42,9 @@ public class boardService {
 		return boardmapper.deleteBoard(id);
 	}
 
+	public int updateBoard(Map<String, Object> dataMap) {
+		// TODO Auto-generated method stub
+		return boardmapper.updateBoard(dataMap);
+	}
+
 }

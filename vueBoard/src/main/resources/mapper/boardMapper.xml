@@ -3,12 +3,41 @@
 
 
 <mapper namespace="com.vue.vueBoard.mapper.boardMapper">
+<sql id="search">
+ <if test="keyword  != null and keyword  != ''">
+        <choose>
+            <when test='searchType == "T".toString()'>
+                AND title LIKE CONCAT('%', #{keyword}, '%')
+            </when>
+            <when test='searchType == "C".toString()'>
+                AND content LIKE CONCAT('%', #{keyword}, '%')
+            </when>
+            <when test='searchType == "A".toString()'>
+                AND (
+                    content LIKE CONCAT('%', #{keyword}, '%') OR
+                    title LIKE CONCAT('%', #{keyword}, '%') OR
+                    writer LIKE CONCAT('%', #{keyword}, '%')
+                )
+            </when>
+        </choose>
+    </if>
+
+</sql>
+
+
 <select id="getboardlist" resultType="map" >
-	 SELECT * FROM vue_board
+	SELECT * FROM vue_board
+	WHERE 
+		1=1
+  	<include refid="search"></include>
+    ORDER BY updatedate desc
 	 LIMIT #{page}, #{pageSize}
 </select>
 <select id="getTotalCnt" resultType="int">
  	SELECT COUNT(*) FROM vue_board
+		WHERE 
+		1=1
+	<include refid="search"></include>
 </select>
 <select id="getboard" resultType="map">
 	SELECT * FROM VUE_BOARD WHERE id = #{id}
@@ -22,4 +51,14 @@
 <delete id="deleteBoard">
 	DELETE FROM VUE_BOARD WHERE id = #{id}
 </delete>
+<update id="updateBoard">
+	UPDATE VUE_BOARD
+	SET
+    	title = #{title}
+    	, writer = #{writer}
+    	, content = #{content}
+    	, updatedate = now()
+	WHERE id = #{id}
+
+</update>
 </mapper>

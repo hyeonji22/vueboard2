@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,16 +32,19 @@ public class boardController {
 	
 	//목록조회
 	@GetMapping("/board/{currentPage}")
-	public ResponseEntity<Map<String, Object>> getBoardList(@PathVariable int currentPage ){
+	public ResponseEntity<Map<String, Object>> getBoardList(@PathVariable int currentPage,@RequestParam Map<String, Object> inMap){
+		log.debug("inMap ", inMap);
 		
-		log.debug("currentPage" +currentPage);
 		int pageSize =10;
 		int page = (currentPage-1)*pageSize;
 
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		dataMap.put("pageSize", pageSize);
 		dataMap.put("page", page);
+		dataMap.put("searchType", inMap.get("searchType"));
+		dataMap.put("keyword", inMap.get("keyword"));
 		
+	    
 		List<Map<String, Object>> boardList = boardservice.getboardlist(dataMap);
 		int totalCnt = boardservice.getTotalCnt(dataMap);
 		
@@ -123,6 +127,28 @@ public class boardController {
 			 return new ResponseEntity<Integer>(HttpStatus.INTERNAL_SERVER_ERROR);
 		 }
     	
+    }
+    //글수정 
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<Integer> updateBoard(@PathVariable Long id,
+    	@RequestBody Map<String, Object> inMap){
+    	
+    	log.debug("inMap" +inMap);
+    	
+    	Map<String, Object> dataMap = new HashMap<String, Object>();
+    	dataMap.put("id", id);
+    	dataMap.put("title", inMap.get("title"));
+    	dataMap.put("writer", inMap.get("writer"));
+    	dataMap.put("content", inMap.get("content"));
+    	
+    	int result = boardservice.updateBoard(dataMap);
+    	
+    	if (result == 1 ) {
+			 return new ResponseEntity<Integer>(result, HttpStatus.OK);
+		 }else{
+			 return new ResponseEntity<Integer>(HttpStatus.INTERNAL_SERVER_ERROR);
+		 }
+   	
     }
     
     

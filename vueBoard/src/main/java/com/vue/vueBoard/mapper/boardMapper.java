@@ -18,6 +18,8 @@ public interface boardMapper {
 
 	int deleteBoard(Long id);
 
+	int updateBoard(Map<String, Object> dataMap);
+
 
 
 
